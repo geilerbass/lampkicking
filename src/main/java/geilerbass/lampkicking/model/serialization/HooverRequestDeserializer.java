@@ -1,8 +1,6 @@
 package geilerbass.lampkicking.model.serialization;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -25,20 +23,29 @@ public class HooverRequestDeserializer extends StdDeserializer<HooverRequest> {
     }
 
     @Override
-    public HooverRequest deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public HooverRequest deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode jsonNode = jsonParser.getCodec().readTree(jsonParser);
         String instructions = jsonNode.get("instructions").asText();
         ArrayNode roomSizeNode = (ArrayNode) jsonNode.get("roomSize");
         ArrayNode coordsNode = (ArrayNode) jsonNode.get("coords");
-        Coords roomSize = new Coords(roomSizeNode.get(0).asInt(), roomSizeNode.get(1).asInt());
-        Coords coords = new Coords(coordsNode.get(0).asInt(), coordsNode.get(1).asInt());
+        Coords roomSize = deserialiseCoords(roomSizeNode);
+        Coords coords = deserialiseCoords(coordsNode);
+        List<Coords> patchesList = deserializePatches(jsonNode);
+        return new HooverRequest(roomSize, coords, patchesList.toArray(new Coords[0]), instructions);
+    }
+
+    private List<Coords> deserializePatches(JsonNode jsonNode) {
         ArrayNode patchesNode = (ArrayNode) jsonNode.get("patches");
         List<Coords> patchesList = new ArrayList<>();
         Iterator<JsonNode> elements = patchesNode.elements();
         while (elements.hasNext()) {
             ArrayNode next = (ArrayNode)elements.next();
-            patchesList.add(new Coords(next.get(0).asInt(), next.get(1).asInt()));
+            patchesList.add(deserialiseCoords(next));
         }
-        return new HooverRequest(roomSize, coords, patchesList.toArray(new Coords[0]), instructions);
+        return patchesList;
+    }
+
+    private Coords deserialiseCoords(ArrayNode roomSizeNode) {
+        return new Coords(roomSizeNode.get(0).asInt(), roomSizeNode.get(1).asInt());
     }
 }

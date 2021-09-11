@@ -1,7 +1,11 @@
 package geilerbass.lampkicking.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import geilerbass.lampkicking.model.serialization.HooverReportSerializer;
+
 import java.util.Objects;
 
+@JsonSerialize(using = HooverReportSerializer.class)
 public class HooverReport {
     private final Coords coords;
     private final int patches;

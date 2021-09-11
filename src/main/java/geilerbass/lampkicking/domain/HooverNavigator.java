@@ -11,17 +11,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class HooverNavigator {
-    private final Coords roomSize;
+    private final Coords boundarySpaces;
     private final Coords[] patches;
 
     public HooverNavigator(final Coords roomSize, final Coords[] patches) {
-        this.roomSize = roomSize;
+        this.boundarySpaces = new Coords(roomSize.getX() -1, roomSize.getY() - 1);
         this.patches = patches;
     }
 
     public HooverReport navigate(final Coords start, final String instructions) {
-        List<Function<Coords, Coords>> hooverMoves = toHooverMoves(instructions);
-        Set<Coords> visited = new HashSet<>();
+        final List<Function<Coords, Coords>> hooverMoves = toHooverMoves(instructions);
+        final Set<Coords> visited = new HashSet<>();
         Coords position = start;
         for(Function<Coords, Coords> move : hooverMoves) {
             position = move.apply(position);
@@ -40,11 +40,11 @@ public class HooverNavigator {
     private Function<Coords, Coords> mapInstructions(int c) {
         switch (c) {
             case 'N' :
-                return (start -> start.getY() < roomSize.getY() ? new Coords(start.getX(), start.getY() + 1) : start);
+                return (start -> start.getY() < boundarySpaces.getY() ? new Coords(start.getX(), start.getY() + 1) : start);
             case 'S' :
                 return (start -> start.getY() > 0 ? new Coords(start.getX(), start.getY() - 1) : start);
             case 'E' :
-                return (start -> start.getY() < roomSize.getX() ? new Coords(start.getX() + 1, start.getY()) : start);
+                return (start -> start.getX() < boundarySpaces.getX() ? new Coords(start.getX() + 1, start.getY()) : start);
             case 'W' :
                 return (start -> start.getX() > 0 ? new Coords(start.getX() - 1, start.getY()) : start);
             default :

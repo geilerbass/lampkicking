@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import geilerbass.lampkicking.model.Coords;
 import geilerbass.lampkicking.model.HooverReport;
-import geilerbass.lampkicking.model.serialization.HooverReportSerializer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -17,11 +17,6 @@ public class HooverController {
         return "Hello World";
     }
 
-    @GetMapping("/hoover")
-    public HooverReport getHoover() {
-        return new HooverReport(new Coords(1, 3), 1);
-    }
-
     @PostMapping("/hoover")
     public HooverReport postHoover(@RequestBody HooverRequest hooverRequest) {
         return new HooverNavigator(hooverRequest.getRoomSize(), hooverRequest.getPatches())

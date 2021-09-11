@@ -1,8 +1,12 @@
 package geilerbass.lampkicking.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import geilerbass.lampkicking.model.serialization.HooverRequestDeserializer;
+
 import java.util.Arrays;
 import java.util.Objects;
 
+@JsonDeserialize(using = HooverRequestDeserializer.class)
 public class HooverRequest {
     public Coords getRoomSize() {
         return roomSize;
