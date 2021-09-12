@@ -14,7 +14,7 @@
 
 You can check that the service works by using a REST client, for example, with cUrl, the following command: 
 
->curl -X POST http://localhost:8080/hoover -H 'Content-Type: application/json' -d '{"roomSize":[5,5],"coords":[1,2],"patches":[[1,0],[2,2],[2,3]],"instructions":"NNESEESWNWSNEWNNWWWSEEE"}'
+>`curl -X POST http://localhost:8080/hoover -H 'Content-Type: application/json' -d '{"roomSize":[5,5],"coords":[1,2],"patches":[[1,0],[2,2],[2,3]],"instructions":"NNESEESWNWSNEWNNWWWSEEE"}'`
 
 should return the response: 
->{"coords":[3,3],"patches":2}
+>`{"coords":[3,3],"patches":2}`
