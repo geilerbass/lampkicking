@@ -11,79 +11,88 @@ public class HooverNavigatorTest {
 
     @Test
     public void hooverNavigatesCorrectlyWithClearPath() {
-        assertHooverReportIsAsExpected(new HooverReport(new Coords(1, 3), 1),
-                new HooverRequest(
-                        new Coords(5, 5),
-                        new Coords(1, 2),
-                        new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
-                        "NNESEESWNWW"));
+        assertHooverReportIsAsExpected(new HooverRequest(
+                new Coords(5, 5),
+                new Coords(1, 2),
+                new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
+                "NNESEESWNWW"), new HooverReport(new Coords(1, 3), 1)
+        );
     }
 
     @Test
     public void edgeCaseBottomLeftOfGrid() {
-        assertHooverReportIsAsExpected(new HooverReport(new Coords(0, 0), 0),
-                new HooverRequest(
-                        new Coords(5, 5),
-                        new Coords(0, 0),
-                        new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
-                        "SWSWSWSW"));
+        assertHooverReportIsAsExpected(new HooverRequest(
+                new Coords(5, 5),
+                new Coords(0, 0),
+                new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
+                "SWSWSWSW"), new HooverReport(new Coords(0, 0), 0)
+        );
     }
 
     @Test
     public void edgeCaseBottomRightOfGrid() {
-        assertHooverReportIsAsExpected(new HooverReport(new Coords(4, 0), 0),
-                new HooverRequest(
-                        new Coords(5, 5),
-                        new Coords(4, 0),
-                        new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
-                        "SESESESE"));
+        assertHooverReportIsAsExpected(new HooverRequest(
+                new Coords(5, 5),
+                new Coords(4, 0),
+                new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
+                "SESESESE"), new HooverReport(new Coords(4, 0), 0)
+        );
     }
 
     @Test
     public void edgeCaseTopLeftOfGrid() {
-        assertHooverReportIsAsExpected(new HooverReport(new Coords(0, 4), 0),
-                new HooverRequest(
-                        new Coords(5, 5),
-                        new Coords(0, 4),
-                        new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
-                        "NWNWNWNW"));
+        assertHooverReportIsAsExpected(new HooverRequest(
+                new Coords(5, 5),
+                new Coords(0, 4),
+                new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
+                "NWNWNWNW"), new HooverReport(new Coords(0, 4), 0)
+        );
     }
 
     @Test
     public void edgeCaseTopRightOfGrid() {
-        assertHooverReportIsAsExpected(new HooverReport(new Coords(4, 4), 0),
-                new HooverRequest(
-                        new Coords(5, 5),
-                        new Coords(4, 4),
-                        new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
-                        "NENENENE"));
+        assertHooverReportIsAsExpected(new HooverRequest(
+                new Coords(5, 5),
+                new Coords(4, 4),
+                new Coords[]{new Coords(1, 0), new Coords(2, 2), new Coords(2, 3)},
+                "NENENENE"), new HooverReport(new Coords(4, 4), 0)
+        );
     }
 
     @Test
     public void noPatchesCleanWhenNoPatchesDirty() {
-        assertHooverReportIsAsExpected(new HooverReport(new Coords(4, 4), 0),
-                new HooverRequest(
-                        new Coords(5, 5),
-                        new Coords(0, 0),
-                        new Coords[]{},
-                        "NNNNESSSSENNNNESSSSENNNN"
-                )
-                );
+        assertHooverReportIsAsExpected(new HooverRequest(
+                new Coords(5, 5),
+                new Coords(0, 0),
+                new Coords[]{},
+                "NNNNESSSSENNNNESSSSENNNN"
+        ), new HooverReport(new Coords(4, 4), 0)
+        );
     }
 
     @Test
     public void duplicatePatchesNotCleanedMoreThanOnce() {
-        assertHooverReportIsAsExpected(new HooverReport(new Coords(0, 0), 1),
-                new HooverRequest(
-                        new Coords(5, 5),
-                        new Coords(0, 0),
-                        new Coords[]{new Coords(1, 1)},
-                        "NESWNESWNESW"
-                )
+        assertHooverReportIsAsExpected(new HooverRequest(
+                new Coords(5, 5),
+                new Coords(0, 0),
+                new Coords[]{new Coords(1, 1)},
+                "NESWNESWNESW"
+        ), new HooverReport(new Coords(0, 0), 1)
         );
     }
 
-    private void assertHooverReportIsAsExpected(final HooverReport expected, final HooverRequest hooverRequest) {
+    @Test
+    public void dirtyStartingPositionIsCleaned() {
+        assertHooverReportIsAsExpected(new HooverRequest(
+                new Coords(5, 5),
+                new Coords(2, 2),
+                new Coords[]{new Coords(2, 2), new Coords(3, 1)},
+                "NNEEN"
+        ), new HooverReport(new Coords(4, 4), 1)
+        );
+    }
+
+    private void assertHooverReportIsAsExpected(final HooverRequest hooverRequest, final HooverReport expected) {
 
         final HooverNavigator hooverNavigator = new HooverNavigator(hooverRequest.getRoomSize(), hooverRequest.getPatches());
 

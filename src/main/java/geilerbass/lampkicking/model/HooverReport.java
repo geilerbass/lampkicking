@@ -8,6 +8,15 @@ import java.util.Objects;
 @JsonSerialize(using = HooverReportSerializer.class)
 public class HooverReport {
     private final Coords coords;
+
+    @Override
+    public String toString() {
+        return "HooverReport{" +
+                "coords=" + coords +
+                ", patches=" + patches +
+                '}';
+    }
+
     private final int patches;
 
     public HooverReport(Coords coords, int patches) {
